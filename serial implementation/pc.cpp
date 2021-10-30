@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     //Read the 2d points from a file
-    int n = 30, k = 2;
+    int n = 5000, k = 3;
     double t1, t2;
     int x[n], y[n], convx[n], convy[n], kc[n];
     srand(time(0));
@@ -19,8 +19,8 @@ int main()
     t1 = omp_get_wtime();
     for (int i = 0; i < n; i++)
     {
-        x[i] = rand() % 100;
-        y[i] = rand() % 100;
+        x[i] = rand() % n;
+        y[i] = rand() % n;
         //x[i]=y[i]=i+1;
         //scanf("%d%d",&x[i],&y[i]);
         //x[i]=x[i]%1000;
@@ -33,7 +33,10 @@ int main()
     //call the clusters' function and get the clusters
     cout << "Obtaining the clusters...!!" << endl;
 
+    double t3 = omp_get_wtime();
     find_clusters(n, k, x, y, kc);
+    double t4 = omp_get_wtime();
+    cout << "Time diff: " << t4 - t3 << endl;
 
     int yc[k][n], xc[k][n], clust_size[k];
     //#pragma omp parallel for
@@ -51,7 +54,7 @@ int main()
             {
                 if (kc[i] == j)
                 {
-                    printf("point %d: (%d,%d)\n", i, x[i], y[i]);
+                    //printf("point %d: (%d,%d)\n", i, x[i], y[i]);
                     clust_size[j] += 1;
                     xc[j][clust_size[j] - 1] = x[i];
                     yc[j][clust_size[j] - 1] = y[i];
